@@ -8,7 +8,7 @@ from pymongo import MongoClient
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
 INTERVALO = 30
-ARQUIVO = "/var/log/temperatura"
+ARQUIVO = "temperatura.log"
 BD_IP = "192.168.122.1"
 BD_PORTA = "27017"
 SENSOR = "bage-0001"
