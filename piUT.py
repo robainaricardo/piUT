@@ -4,25 +4,26 @@ import datetime
 import time
 from pymongo import MongoClient
 
+
 # Constantes
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
 INTERVALO = 30
 ARQUIVO = "temperatura.log"
-BD_IP = "192.168.122.1"
-BD_PORTA = "27017"
+BD = "mongodb+srv://tchelinux:tchelinux1234@cluster0.vfev4.mongodb.net/<dbname>?retryWrites=true&w=majority"
 SENSOR = "bage-0001"
+
 
 # Funções
 def salvarLog(umidade, temperatura, data):
-    with open(ARQUIVO, 'w') as log:
+    with open(ARQUIVO, 'a') as log:
         log.write(f"Sensor: {SENSOR}, Data: {data}, Umidade: {umidade}, Temperatura: {temperatura}\n")
 
 
 def salvarBD(umidade, temperatura, data):
-    client = MongoClient(BD_IP, BD_PORTA)
-    db = client.temperatura
-    medicao = db.insert_one({"Sensor" : SENSOR, "data": data, "umidade": umidade, "temperatura": temperatura}).inserted_id()
+    client = MongoClient(BD)
+    db = client.tchelinux
+    db.piUT.insert_one({"Sensor" : SENSOR, "data": data, "umidade": umidade, "temperatura": temperatura})
 
 
 # Main
@@ -47,5 +48,3 @@ while True:
     else:
         # Erro ao realizar a medição, tenta novamente
         print("Medição inválida")
-
-
