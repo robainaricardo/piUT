@@ -13,6 +13,18 @@ BD_IP = "192.168.122.1"
 BD_PORTA = "27017"
 SENSOR = "bage-0001"
 
+# Funções
+def salvarLog(umidade, temperatura, data):
+    with open(ARQUIVO, 'w') as log:
+        log.write(f"Sensor: {SENSOR}, Data: {data}, Umidade: {umidade}, Temperatura: {temperatura}\n")
+
+
+def salvarBD(umidade, temperatura, data):
+    client = MongoClient(BD_IP, BD_PORTA)
+    db = client.temperatura
+    medicao = db.insert_one({"Sensor" : SENSOR, "data": data, "umidade": umidade, "temperatura": temperatura}).inserted_id()
+
+
 # Main
 while True:
     # Recebe a medição feita pelo sensor e a data
@@ -35,16 +47,5 @@ while True:
     else:
         # Erro ao realizar a medição, tenta novamente
         print("Medição inválida")
-
-# Funções
-def salvarLog(umidade, temperatura, data):
-    with open(ARQUIVO, 'w') as log:
-        log.write(f"Sensor: {SENSOR}, Data: {data}, Umidade: {umidade}, Temperatura: {temperatura}\n")
-
-
-def salvarBD(umidade, temperatura, data):
-    client = MongoClient(BD_IP, BD_PORTA)
-    db = client.temperatura
-    medicao = db.insert_one({"Sensor" : SENSOR, "data": data, "umidade": umidade, "temperatura": temperatura}).inserted_id()
 
 
